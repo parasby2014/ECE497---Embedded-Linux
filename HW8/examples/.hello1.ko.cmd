@@ -1,0 +1,1 @@
+cmd_drivers/char/examples/hello1.ko := arm-linux-gnueabi-ld -EL -r  -T /home/bp/exercises/linux-dev/KERNEL/scripts/module-common.lds --build-id  -o drivers/char/examples/hello1.ko drivers/char/examples/hello1.o drivers/char/examples/hello1.mod.o

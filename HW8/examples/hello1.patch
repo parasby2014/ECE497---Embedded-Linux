@@ -1,0 +1,127 @@
+From 49661442724dc3397e28c7a5d3015d4b7d377988 Mon Sep 17 00:00:00 2001
+From: Ben Paras <parasby@rose-hulman.edu>
+Date: Thu, 24 Oct 2013 00:09:09 -0400
+Subject: [PATCH 1/2] Files for hello1 kernel module
+
+---
+ drivers/char/Kconfig           |    6 ++++++
+ drivers/char/Makefile          |    3 ++-
+ drivers/char/examples/Makefile |    1 +
+ drivers/char/examples/hello1.c |   21 +++++++++++++++++++++
+ 4 files changed, 30 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/char/examples/Makefile
+ create mode 100644 drivers/char/examples/hello1.c
+
+diff --git a/drivers/char/Kconfig b/drivers/char/Kconfig
+index 72bedad..c6dec87 100644
+--- a/drivers/char/Kconfig
++++ b/drivers/char/Kconfig
+@@ -4,6 +4,12 @@
+ 
+ menu "Character devices"
+ 
++config EXAMPLES
++        tristate "ENABLE EXAMPLES"
++        default m
++        help
++         Enable compilation option for Embedded Linux Primer driver examples
++
+ source "drivers/tty/Kconfig"
+ 
+ config DEVKMEM
+diff --git a/drivers/char/Makefile b/drivers/char/Makefile
+index 7ff1d0d..7100998 100644
+--- a/drivers/char/Makefile
++++ b/drivers/char/Makefile
+@@ -21,7 +21,6 @@ obj-$(CONFIG_BFIN_OTP)		+= bfin-otp.o
+ obj-$(CONFIG_PRINTER)		+= lp.o
+ 
+ obj-$(CONFIG_APM_EMULATION)	+= apm-emulation.o
+-
+ obj-$(CONFIG_DTLK)		+= dtlk.o
+ obj-$(CONFIG_APPLICOM)		+= applicom.o
+ obj-$(CONFIG_SONYPI)		+= sonypi.o
+@@ -56,6 +55,8 @@ obj-$(CONFIG_PCMCIA)		+= pcmcia/
+ obj-$(CONFIG_HANGCHECK_TIMER)	+= hangcheck-timer.o
+ obj-$(CONFIG_TCG_TPM)		+= tpm/
+ 
++obj-$(CONFIG_EXAMPLES) 		+= examples/
++
+ obj-$(CONFIG_PS3_FLASH)		+= ps3flash.o
+ 
+ obj-$(CONFIG_JS_RTC)		+= js-rtc.o
+diff --git a/drivers/char/examples/Makefile b/drivers/char/examples/Makefile
+new file mode 100644
+index 0000000..ffda336
+--- /dev/null
++++ b/drivers/char/examples/Makefile
+@@ -0,0 +1 @@
++obj-$(CONFIG_EXAMPLES) += hello1.o
+diff --git a/drivers/char/examples/hello1.c b/drivers/char/examples/hello1.c
+new file mode 100644
+index 0000000..17ec4b2
+--- /dev/null
++++ b/drivers/char/examples/hello1.c
+@@ -0,0 +1,21 @@
++/* Example Minimal Character Device Driver */
++#include <linux/module.h>
++
++static int __init hello_init(void)
++{
++    printk(KERN_INFO "Hello Example Init\n");
++
++    return 0;
++}
++
++static void __exit hello_exit(void)
++{
++    printk(KERN_INFO "Hello Example Exit\n");
++}
++
++module_init(hello_init);
++module_exit(hello_exit);
++
++MODULE_AUTHOR("Chris Hallinan");
++MODULE_DESCRIPTION("Hello World Example");
++MODULE_LICENSE("GPL");
+-- 
+1.7.9.5
+
+
+From ed7af441cb007760f294de3503e430147aa240b9 Mon Sep 17 00:00:00 2001
+From: Ben Paras <parasby@rose-hulman.edu>
+Date: Thu, 24 Oct 2013 17:33:05 -0400
+Subject: [PATCH 2/2] modified hello1.c to have 2 parameters
+
+---
+ drivers/char/examples/hello1.c |   12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/char/examples/hello1.c b/drivers/char/examples/hello1.c
+index 17ec4b2..32398fd 100644
+--- a/drivers/char/examples/hello1.c
++++ b/drivers/char/examples/hello1.c
+@@ -1,9 +1,19 @@
+ /* Example Minimal Character Device Driver */
+ #include <linux/module.h>
++static int debug_enable0 = 0;
++static int debug_enable1 = 0;
+ 
++/* Added driver parameters */
++module_param(debug_enable0, int, 0); 
++MODULE_PARM_DESC(debug_enable0, "Enable module debug0 mode.");
++
++module_param(debug_enable1, int, 0); 
++MODULE_PARM_DESC(debug_enable1, "Enable module debug1 mode.");
++
++/*add new print values for new module*/
+ static int __init hello_init(void)
+ {
+-    printk(KERN_INFO "Hello Example Init\n");
++    printk(KERN_INFO "Hello Example Init - debug0 mode: %s debug1 mode: %s\n", 			debug_enable0 ? "enabled" : "disabled", debug_enable1 ? "enabled" : 			"disabled");
+ 
+     return 0;
+ }
+-- 
+1.7.9.5
+
