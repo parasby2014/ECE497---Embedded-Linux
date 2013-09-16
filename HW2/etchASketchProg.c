@@ -218,7 +218,7 @@ int main(int argc, char **argv, char **envp)
 			len = read(fdset[3].fd, buf, MAX_BUF);
 			printf("\n Down PRESSED\n");
 			
-			if( y < boardSize)	
+			if( y < ( boardSize -1)	)
 			{
 				y++;
 				updateBoard(boardSize, gameBoard, x, y );
@@ -236,7 +236,7 @@ int main(int argc, char **argv, char **envp)
 			len = read(fdset[4].fd, buf, MAX_BUF);
 			printf("\n Right PRESSED\n");
 			
-			if( x < boardSize)
+			if( x < (boardSize-1))
 			{
 				x++;
 				updateBoard(boardSize, gameBoard, x, y ); 
