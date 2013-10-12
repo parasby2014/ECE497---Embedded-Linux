@@ -1,0 +1,12 @@
+[Unit]
+Description=Ben Paras Bonescript server
+
+[Service]
+WorkingDirectory=/home/root/exercises/realtime
+ExecStart=/usr/bin/node boneServer.js
+SyslogIdentifier=bonescript
+Environment=NODE_PATH=/usr/lib/node_modules
+
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,8 @@
+The following is from piggy.gzip.S assembly file. It's the same file as in the book. 
+
+	.section .piggydata,#alloc
+	.globl	input_data
+input_data:
+	.incbin	"arch/arm/boot/compressed/piggy.gzip"
+	.globl	input_data_end
+input_data_end:
